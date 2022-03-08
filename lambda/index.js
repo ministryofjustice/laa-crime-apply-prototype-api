@@ -6,7 +6,6 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 exports.handler = async (event, context) => {
   let body, item, id;
   let statusCode = 200;
-  const headers = { "Content-Type": "application/json" };
   const request = event.requestContext;
 
   try {
@@ -57,6 +56,11 @@ exports.handler = async (event, context) => {
   } finally {
     body = JSON.stringify(body);
   }
+
+  const headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*"
+  };
 
   return { statusCode, body, headers };
 };
