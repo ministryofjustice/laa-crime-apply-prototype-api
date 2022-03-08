@@ -4,7 +4,7 @@ Resources for a prototype API that supports applications for criminal legal aid.
 
 ## Swagger
 
-See `swagger.yaml` for the API spec.
+See `/dist/openapi.json` for the API spec.
 
 ## Swagger docs
 
