@@ -22,7 +22,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/schemas/laa_application.json"
+                "$ref": "#/components/schemas/fullApplication"
               },
               "examples": {
                 "objectExample": {
@@ -75,6 +75,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Empty"
+                },
+                "examples": {
+                  "objectExample": {
+                    "Items": [
+                      { "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json" },
+                      { "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json" }
+                    ]
+                  }
                 }
               }
             }
@@ -87,7 +95,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/schemas/tolerant/laa_application.json"
+                "$ref": "#/components/schemas/partApplication"
               },
               "examples": {
                 "objectExample": {
@@ -145,6 +153,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Empty"
+                },
+                "examples": {
+                  "objectExample": {
+                    "Item": { "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json" }
+                  }
                 }
               }
             }
@@ -187,6 +200,12 @@
   },
   "components": {
     "schemas": {
+      "fullApplication": {
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/schemas/laa_application.json"
+      },
+      "partApplication": {
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/schemas/tolerant/laa_application.json"
+      },
       "Empty": {
         "title": "Empty Schema",
         "type": "object"
