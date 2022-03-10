@@ -1,7 +1,8 @@
-const dynamoTable = 'applications_crime';
 const AWS = require("aws-sdk");
+const validate = require('./validate');
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
+const config = require('./config');
 
 exports.handler = async (event, context) => {
   let body, item, id;
@@ -11,33 +12,36 @@ exports.handler = async (event, context) => {
   try {
     switch (request.httpMethod) {
       case "DELETE":
-        id = itemId(event);
-        item = itemQuery(id);
+        id = utils.itemId(event);
+        item = utils.itemQuery(id);
         await dynamo.delete(item).promise();
         body = `Deleted item ${id}`;
         break;
       case "GET":
-        id = itemId(event);
+        id = utils.itemId(event);
         if (id) {
-          item = itemQuery(id);
+          item = utils.itemQuery(id);
           body = await dynamo.get(item).promise();
         } else {
-          body = await dynamo.scan({ TableName: dynamoTable }).promise();
+          body = await dynamo.scan({ TableName: config.dynamoTable }).promise();
         }
         break;
       case "POST":
         let requestJSON = JSON.parse(event.body);
-        let applicationStatus = 'started';
-        //let validator = 'partial' schema
-        if (request.path.includes('/submit')) {
-          applicationStatus = 'completed';
-          // validator = full schema
+        let submit = request.path.includes('/submit');
+        let applicationStatus = submit ? 'completed' : 'started';
+        let schema = submit ? config.schemas.strict : config.schemas.tolerant;
+
+        let validation = await validate(schema, requestJSON);
+        if (!validation.pass) {
+          statusCode = 422;
+          body = validation.errors;
+          break;
         }
-        // validate against 'partial' schema
 
         await dynamo
           .put({
-            TableName: dynamoTable,
+            TableName: config.dynamoTable,
             Item: {
               id: request.requestId, // we safe to use API gateway unique identifier?
               data: requestJSON,
@@ -65,7 +69,7 @@ exports.handler = async (event, context) => {
   return { statusCode, body, headers };
 };
 
-const itemId = (event) => event.pathParameters && event.pathParameters.proxy;
-const itemQuery = (id) => {
-  return { TableName: dynamoTable, Key: { id } }
+const utils = {
+  itemId: (event) => event.pathParameters && event.pathParameters.proxy,
+  itemQuery: (id) => { return { TableName: config.dynamoTable, Key: { id } } }
 };
