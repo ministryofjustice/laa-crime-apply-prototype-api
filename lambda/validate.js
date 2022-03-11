@@ -1,8 +1,12 @@
 const Ajv = require("ajv");
+const URL = require("url").URL;
 const fetch = require('./fetch');
 
 module.exports = async (schema, data) => {
-  let schema =  await fetch(schemas.strict);
+  if(stringIsAValidUrl(schema)) {
+    schema = await fetch(schema);
+  }
+
   let validation = await validate(schema, data);
   return validation;
 };
@@ -18,4 +22,13 @@ const validate = async (schema, data) => {
     pass: validator(data),
     errors: validator.errors
   };
-}
+};
+
+const stringIsAValidUrl = (s) => {
+  try {
+    new URL(s);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
