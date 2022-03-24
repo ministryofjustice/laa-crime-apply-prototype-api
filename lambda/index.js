@@ -45,7 +45,8 @@ exports.handler = async (event, context) => {
             Item: {
               id: request.requestId, // we safe to use API gateway unique identifier?
               data: requestJSON,
-              status: applicationStatus
+              status: applicationStatus,
+              date: Date.now()
             }
           })
           .promise();
