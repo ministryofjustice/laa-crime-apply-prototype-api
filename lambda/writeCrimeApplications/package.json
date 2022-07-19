@@ -1,0 +1,11 @@
+{
+  "name": "writeCrimeApplications",
+  "description": "Write ops for the Crime Applications data store",
+  "scripts": {
+    "start": "node start.js",
+    "test-validation": "node validation-test.js"
+  },
+  "dependencies": {
+    "ajv": "^8.10.0"
+  }
+}

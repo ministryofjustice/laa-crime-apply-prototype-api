@@ -9,7 +9,7 @@
       "url": "https://n7ykjge71d.execute-api.eu-west-2.amazonaws.com/{basePath}",
       "variables": {
         "basePath": {
-          "default": "alpha"
+          "default": "dev"
         }
       }
     }
@@ -26,7 +26,7 @@
               },
               "examples": {
                 "objectExample": {
-                  "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json"
+                  "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/1.0.0/examples/legal_aid_application.json"
                 }
               }
             }
@@ -56,6 +56,78 @@
     "/applications": {
       "get": {
         "summary": "Gets a list of applications",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "description": "Fetch applications by the date they were submitted (must specify at least year and month, format: YYYY-MM-DDTHH:MM:SS)",
+            "schema": { "type": "string" },
+            "examples": {
+              "byMonth": {
+                "value": "2022-07",
+                "summary": "Filter by month"
+              },
+              "byDay": {
+                "value": "2022-07-18",
+                "summary": "Filter by day"
+              },
+              "byHour": {
+                "value": "2022-07-18T19",
+                "summary": "Filter by hour"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "description": "Fetch applications by status",
+            "schema": {
+              "type": "string",
+              "enum": ["started", "completed", "assigned", "reviewed", "decided"],
+              "example": "completed"
+            }
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "schema": { "type": "string" },
+            "description": "Fetch applications by provider (must specify at least firm, format: firm#office#email)",
+            "examples": {
+              "byFirm": {
+                "value": "Firm ABC",
+                "summary": "Filter by firm"
+              },
+              "byOffice": {
+                "value": "Firm ABC#office1",
+                "summary": "Filter by office"
+              },
+              "byEmail": {
+                "value": "Firm ABC#office1#jo@firmabc.com",
+                "summary": "Filter by solicitor"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": { "type": "string" },
+            "description": "Additional attribute filters (format is [attribute]=[value], or specify an operator with [attribute]:[operator]=[value])",
+            "examples": {
+              "byApplicant": {
+                "value": "applicant_reference:begins_with=Smith",
+                "summary": "Filter by applicants beginning with 'Smith'"
+              },
+              "provider": {
+                "value": "provider_reference=Law ABC",
+                "summary": "Filter by provider firm 'Law ABC'"
+              },
+              "providerBegins": {
+                "value": "provider_reference:begins_with=Law",
+                "summary": "Filter by firm names beginning with 'Law'"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -75,14 +147,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Empty"
-                },
-                "examples": {
-                  "objectExample": {
-                    "Items": [
-                      { "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json" },
-                      { "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json" }
-                    ]
-                  }
                 }
               }
             }
@@ -99,7 +163,7 @@
               },
               "examples": {
                 "objectExample": {
-                  "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json"
+                  "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/1.0.0/examples/legal_aid_application.json"
                 }
               }
             }
@@ -153,11 +217,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Empty"
-                },
-                "examples": {
-                  "objectExample": {
-                    "Item": { "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/examples/laa_application.json" }
-                  }
                 }
               }
             }
@@ -201,10 +260,10 @@
   "components": {
     "schemas": {
       "fullApplication": {
-        "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/schemas/laa_application.json"
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/1.0.0/schemas/legal_aid_application.json"
       },
       "partApplication": {
-        "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/schemas/tolerant/laa_application.json"
+        "$ref": "https://raw.githubusercontent.com/ministryofjustice/laa-schemas/main/prototyping/criminal-legal-aid/1.0.0/schemas/tolerant/legal_aid_application.json"
       },
       "Empty": {
         "title": "Empty Schema",

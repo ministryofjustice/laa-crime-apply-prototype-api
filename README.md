@@ -12,6 +12,6 @@ See `/dist/openapi.json` for the API spec.
 
 The `/dist` folder includes Swagger UI docs for the API.
 
-## Lambda function for persisting data
+## Lambda functions for persisting data
 
-The `/lambda` folder includes a lambda function handler for CRUD requests to the API. The handler uses DynamoDB as a data store.
+The `/lambda` folder includes 2 lambda handlers: one for writing to the data store, one for reading from the data store. The handler uses DynamoDB as a data store.
