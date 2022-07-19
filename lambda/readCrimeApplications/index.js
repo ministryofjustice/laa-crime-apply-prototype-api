@@ -6,11 +6,12 @@ exports.handler = async (event) => {
 
   try {
     id = itemId(event);
-    params = event.queryStringParameters;
+    params = event.queryStringParameters || {};
 
     if (id) {
       // single application
-      body = await db.getApplication(id, params);
+      let application = await db.getApplication(id, params);
+      body = (application.Items) ? db.utils.lastItem(application) : application;
     } else {
       // set of applications
       body = await db.getApplications(params);

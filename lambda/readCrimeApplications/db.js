@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const dynamo = new AWS.DynamoDB.DocumentClient();
 const config = require('./config');
+const utils = require('./utils');
 
 const db = {
 
@@ -12,7 +13,7 @@ const db = {
     return dynamo.get(item).promise();
   },
 
-  getApplication: async (id, params) => {
+  getApplication: (id, params) => {
     if (params.version) {
       return db.getApplicationVersion(id, params.version);
     }
@@ -22,24 +23,55 @@ const db = {
       KeyConditionExpression: 'application_reference = :ref',
       TableName: config.dynamoTable
     };
-    let application = await dynamo.query(params).promise;
-    return utils.lastItem(application);
+    return dynamo.query(params).promise();
   },
 
   getApplications: (params) => {
-    if (params.date) {
-      return this.getApplicationsByDate(params.date, params.filters);
-    } else {
-      return this.getApplicationsByProvider(params.provider, params.filters);
+    if (params.provider) {
+      return db.getApplicationsByProvider(params.provider, params.filter);
     }
+
+    if (params.status) {
+      return db.getApplicationsByStatus(params.status, params.date, params.filter);
+    }
+
+    if (params.date) {
+      return db.getApplicationsByMonth(params.date, params.filter);
+    }
+
+    return dynamo.scan({ TableName: config.dynamoTable }).promise();
 
     // group applications by application ref?
   },
 
-  getApplicationsByDate: (date, filters) => {
+  getApplicationsByStatus: (status, date, filters) => {
     let params = {
-      ExpressionAttributeValues: { ':date': date },
-      KeyConditionExpression: 'submission_date = :date',
+      ExpressionAttributeValues: { ':status': status },
+      KeyConditionExpression: 'application_status = :status',
+      IndexName: 'status-index',
+      TableName: config.dynamoTable
+    };
+
+    if (date) {
+      params.ExpressionAttributeValues = { ':status': status, ':date': date };
+      params.KeyConditionExpression = 'application_status = :status and begins_with (submission_date, :date)';
+    }
+
+    if (filters) {
+      params = utils.filterParameters(params, filters);
+    }
+
+    return dynamo.query(params).promise();
+  },
+
+  getApplicationsByMonth: (date, filters) => {
+    let elements = date.split('-');
+    let yrMonth = elements[0] + '-' + elements[1];
+
+    let params = {
+      ExpressionAttributeValues: { ':month': yrMonth, ':date': date },
+      KeyConditionExpression: 'submission_month = :month and begins_with (submission_date, :date)',
+      IndexName: 'month-index',
       TableName: config.dynamoTable
     };
 
@@ -47,13 +79,16 @@ const db = {
       params = utils.filterParameters(params, filters);
     }
 
-    return dynamo.query(params).promise;
+    return dynamo.query(params).promise();
   },
 
   getApplicationsByProvider: (provider, filters) => {
+    let elements = provider.split('#');
+    let firm = decodeURI(elements[0]);
+
     let params = {
-      ExpressionAttributeValues: { ':provider': provider },
-      KeyConditionExpression: 'provider = :provider',
+      ExpressionAttributeValues: { ':firm': firm, ':provider': provider },
+      KeyConditionExpression: 'provider_firm = :firm and begins_with (provider_reference, :provider)',
       IndexName: 'provider-index',
       TableName: config.dynamoTable
     };
@@ -62,22 +97,10 @@ const db = {
       params = utils.filterParameters(params, filters);
     }
 
-    return dynamo.query(params).promise;
+    return dynamo.query(params).promise();
   },
 
   utils
-};
-
-const utils = {
-  itemQuery: (key) => { return { TableName: config.dynamoTable, Key: { key } } },
-  lastItem: (data) => { return { Item: data.Items.pop() } },
-  filterParameters: (params, filters) => {
-    Object.entries(filters).forEach(([key, value]) => {
-      params.FilterExpression = key + " = :" + key;
-      params.ExpressionAttributeValues[':' + key] = value;
-    });
-    return params;
-  }
 };
 
 module.exports = db;
