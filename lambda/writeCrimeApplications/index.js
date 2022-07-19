@@ -27,7 +27,6 @@ exports.handler = async (event) => {
 
         let item = mapApplication(data, request);
         await db.create(item);
-
         body = { id: item.application_reference };
         break;
 
@@ -49,7 +48,9 @@ exports.handler = async (event) => {
         break;
 
       case "PUT":
-        // 'close' a case: set ttl to +7 years (unless custom ttl set in body of request)
+        /* To include:
+          - update status - set status attribute
+          - schedule deletion - set expiry attribute */
         throw new Error(`Application expiry not yet supported`);
 
       default:
