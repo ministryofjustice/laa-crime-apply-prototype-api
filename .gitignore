@@ -10,3 +10,7 @@ node_modules/*
 package-lock.json
 lambda/node_modules/*
 lambda/package-lock.json
+lambda/readCrimeApplications/node_modules/*
+lambda/readCrimeApplications/package-lock.json
+lambda/writeCrimeApplications/node_modules/*
+lambda/writeCrimeApplications/package-lock.json
