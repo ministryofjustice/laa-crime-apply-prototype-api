@@ -113,9 +113,9 @@
             "schema": { "type": "string" },
             "description": "Additional attribute filters (format is [attribute]=[value], or specify an operator with [attribute]:[operator]=[value])",
             "examples": {
-              "byApplicant": {
-                "value": "applicant_reference:begins_with=Smith",
-                "summary": "Filter by applicants beginning with 'Smith'"
+              "byClient": {
+                "value": "client_reference:begins_with=Smith",
+                "summary": "Filter by clients beginning with 'Smith'"
               },
               "provider": {
                 "value": "provider_reference=Law ABC",

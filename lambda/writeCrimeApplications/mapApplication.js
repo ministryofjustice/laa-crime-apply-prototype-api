@@ -1,11 +1,11 @@
 module.exports = (data, request) => {
-  let applicant = data.applicant_details && data.applicant_details.applicant || {};
-  let means = applicant.means || {}
+  let client = data.client_details && data.client_details.client || {};
+  let means = client.means || {}
   let provider = data.provider_details || {};
-  let now = new Date();
+  let now = new Date().toISOString();
 
   let defaults = {
-    applicant_reference: applicant.last_name + '#' + applicant.first_name + '#' + applicant.national_insurance_number,
+    client_reference: client.last_name + '#' + client.first_name + '#' + client.national_insurance_number,
     application_reference: 'LAA-' + request.requestId.substring(1, 9),
     application_type: 'Initial application',
     employment_status: means.employment_status,
@@ -13,8 +13,8 @@ module.exports = (data, request) => {
     provider_reference: provider.firm + '#' + provider.office + '#' + provider.email,
     passporting_means: means.passporting,
     application_status: request.path.includes('/submit') ? 'completed' : 'started',
-    submission_date: now.toISOString(),
-    submission_month: now.getFullYear() + '-' + (now.getMonth() + 1),
+    submission_date: now,
+    submission_month: now.substring(0, 7),
     version: 1
   };
 
