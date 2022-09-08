@@ -1,0 +1,268 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+
+Parameters:
+  Stage:
+    Type: String
+    Description: Stage to deploy resources to
+    AllowedValues:
+      - dev
+      - staging
+      - production
+  ReadLambdaCodeVersion:
+    Type: String
+    Description: Version tag of the read lambda code
+  WriteLambdaCodeVersion:
+    Type: String
+    Description: Version tag of the write lambda code
+
+
+Conditions:
+  IsProduction: !Equals [ !Ref Stage, production ]
+
+Globals:
+  Api:
+    OpenApiVersion: 3.0.1
+  Function:
+    Runtime: nodejs16.x
+    MemorySize: 128
+    Timeout: 10
+    Tracing: Active
+    Tags:
+      project: applications-for-criminal-legal-aid
+      environment: !Ref Stage
+
+Resources:
+
+  ApiGwAccountConfig:
+    Type: "AWS::ApiGateway::Account"
+    Properties:
+      CloudWatchRoleArn: !GetAtt "ApiGatewayLoggingRole.Arn"
+
+  ApiGatewayLoggingRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "apigateway.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+
+  CrimeApplicationsApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "applications-for-criminal-legal-aid-api-${Stage}"
+      StageName: !Ref Stage
+      Cors:
+        AllowMethods: "'GET, POST, OPTIONS, DELETE, PUT'"
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+      MethodSettings:
+        - LoggingLevel: INFO
+          ResourcePath: '/*'
+          HttpMethod: '*'
+          ThrottlingBurstLimit: 5
+          ThrottlingRateLimit: 5
+      TracingEnabled: true
+      Variables:
+        LAMBDA_ALIAS: !Ref Stage
+
+  ReadCrimeApplications:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'read-applications-for-criminal-legal-aid-${Stage}'
+      CodeUri: ../lambda/read-crime-applications/
+      Handler: index.handler
+      VersionDescription: !Ref ReadLambdaCodeVersion
+      AutoPublishAlias: !Ref Stage
+      DeploymentPreference:
+        Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
+        Alarms:
+          - !Ref ReadCrimeApplicationsAliasErrorMetricGreaterThanZeroAlarm
+      Environment:
+        Variables:
+          TABLE: !Ref CrimeApplicationsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CrimeApplicationsTable
+      Events:
+        ApiGet:
+          Type: Api
+          Properties:
+            Path: /applications
+            Method: get
+            RestApiId:
+              Ref: CrimeApplicationsApi
+        ApiGetId:
+          Type: Api
+          Properties:
+            Path: /applications/{proxy}
+            Method: get
+            RestApiId:
+              Ref: CrimeApplicationsApi
+
+  WriteCrimeApplications:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'write-applications-for-criminal-legal-aid-${Stage}'
+      CodeUri: ../lambda/write-crime-applications/
+      Handler: index.handler
+      VersionDescription: !Ref WriteLambdaCodeVersion
+      AutoPublishAlias: !Ref Stage
+      DeploymentPreference:
+        Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
+        Alarms:
+          - !Ref WriteCrimeApplicationsAliasErrorMetricGreaterThanZeroAlarm
+      Environment:
+        Variables:
+          TABLE: !Ref CrimeApplicationsTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref CrimeApplicationsTable
+      Events:
+        ApiPostPartial:
+          Type: Api
+          Properties:
+            Path: /applications
+            Method: post
+            RestApiId:
+              Ref: CrimeApplicationsApi
+        ApiPostFull:
+          Type: Api
+          Properties:
+            Path: /applications/submit
+            Method: post
+            RestApiId:
+              Ref: CrimeApplicationsApi
+        ApiPut:
+          Type: Api
+          Properties:
+            Path: /applications
+            Method: put
+            RestApiId:
+              Ref: CrimeApplicationsApi
+        ApiDelete:
+          Type: Api
+          Properties:
+            Path: /applications
+            Method: delete
+            RestApiId:
+              Ref: CrimeApplicationsApi
+
+  CrimeApplicationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: application_reference
+          AttributeType: S
+        - AttributeName: submission_date
+          AttributeType: S
+        - AttributeName: submission_month
+          AttributeType: S
+        - AttributeName: provider_firm
+          AttributeType: S
+        - AttributeName: provider_reference
+          AttributeType: S
+        - AttributeName: application_status
+          AttributeType: S
+      KeySchema:
+        - AttributeName: "application_reference"
+          KeyType: "HASH"
+        - AttributeName: "submission_date"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: "month-index"
+          KeySchema:
+            - AttributeName: "submission_month"
+              KeyType: "HASH"
+            - AttributeName: "submission_date"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: "provider-index"
+          KeySchema:
+            - AttributeName: "provider_firm"
+              KeyType: "HASH"
+            - AttributeName: "provider_reference"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: "status-index"
+          KeySchema:
+            - AttributeName: "application_status"
+              KeyType: "HASH"
+            - AttributeName: "submission_date"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+      TableName: !Sub 'applications-for-criminal-legal-aid-${Stage}'
+      Tags:
+        - Key: "environment"
+          Value: !Ref Stage
+        - Key: "project"
+          Value: "applications-for-criminal-legal-aid"
+      SSESpecification:
+        SSEEnabled: true
+
+  ReadCrimeApplicationsAliasErrorMetricGreaterThanZeroAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Lambda Function Error > 0
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Resource
+          Value: !Sub '${ReadCrimeApplications}:${Stage}'
+        - Name: FunctionName
+          Value: !Ref ReadCrimeApplications
+      EvaluationPeriods: 2
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 0
+
+  WriteCrimeApplicationsAliasErrorMetricGreaterThanZeroAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Lambda Function Error > 0
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Resource
+          Value: !Sub '${WriteCrimeApplications}:${Stage}'
+        - Name: FunctionName
+          Value: !Ref WriteCrimeApplications
+      EvaluationPeriods: 2
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 0
+
+Outputs:
+  ApiEndpoint:
+    Description: "API endpoint"
+    Value: !Sub "https://${CrimeApplicationsApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
+  CrimeApplicationsTable:
+    Description: "DynamoDB table to store applications for criminal legal aid"
+    Value: !Ref CrimeApplicationsTable
