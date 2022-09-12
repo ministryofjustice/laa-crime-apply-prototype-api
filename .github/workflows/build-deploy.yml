@@ -25,4 +25,4 @@ jobs:
       # Run Unit tests - specify unit tests here
 
       # sam deploy
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name crime-applications-staging --s3-bucket crime-apply-api-dynamo-lambda --s3-prefix sam --capabilities CAPABILITY_IAM --parameter-overrides Environment=staging CodeRef=${{ github.sha }}
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name crime-applications-staging --s3-bucket crime-apply-api-dynamo-lambda --s3-prefix sam --capabilities CAPABILITY_IAM --parameter-overrides Stage=staging CodeRef=${{ github.sha }}
