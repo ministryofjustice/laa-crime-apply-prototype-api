@@ -8,9 +8,7 @@ public
 node_modules/*
 .tmuxp.*
 package-lock.json
-lambda/node_modules/*
-lambda/package-lock.json
-lambda/readCrimeApplications/node_modules/*
-lambda/readCrimeApplications/package-lock.json
-lambda/writeCrimeApplications/node_modules/*
-lambda/writeCrimeApplications/package-lock.json
+aws/lambda/node_modules/*
+aws/lambda/*/node_modules/*
+aws/lambda/*/package-lock.json
+aws/infra/out.yml
