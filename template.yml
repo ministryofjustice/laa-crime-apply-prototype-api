@@ -76,7 +76,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'read-applications-for-criminal-legal-aid-${Stage}'
-      CodeUri: ../lambda/read-crime-applications/
+      CodeUri: ./lambda/read-crime-applications/
       Handler: index.handler
       VersionDescription: !Ref CodeRef
       AutoPublishAlias: !Ref Stage
@@ -110,7 +110,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'write-applications-for-criminal-legal-aid-${Stage}'
-      CodeUri: ../lambda/write-crime-applications/
+      CodeUri: ./lambda/write-crime-applications/
       Handler: index.handler
       VersionDescription: !Ref CodeRef
       AutoPublishAlias: !Ref Stage
