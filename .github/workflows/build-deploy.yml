@@ -20,7 +20,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: eu-west-2
       # sam build
-      - run: sam build --use-container
+      - run: sam build --use-container --template-file /aws/infra/template.yml
 
       # Run Unit tests - specify unit tests here
 
