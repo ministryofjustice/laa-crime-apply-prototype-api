@@ -36,4 +36,4 @@ You can use AWS SAM to package and deploy the app. You will need to install the 
   ```
 - Follow the promtps, entering stack name, stage name (dev, staging, or production), and the version numbers of the lambda code
 
-See `template.yml` for the SAM template.
+See `template.yml` for the SAM template. 
