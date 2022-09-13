@@ -16,8 +16,8 @@ The `/aws/lambda` folder includes 2 lambda handlers: one for writing to the data
 
 ## Deployment
 
-* You can deploy to `dev` environment using SAM cli - (see instructions below)
-* Updates are deployed to the `staging` environment on pushing/merging to `main` branch. See ./github/workflows.
+* `dev` - you can deploy manually using SAM cli - (see instructions below)
+* `staging` - updates are auto-deployed to `staging` environment on push/merge to `main` branch. See `./github/workflows`.
 
 ## Using SAM to deploy the app
 

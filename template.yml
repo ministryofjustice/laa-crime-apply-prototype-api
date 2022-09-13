@@ -12,9 +12,6 @@ Parameters:
       - dev
       - staging
       - production
-  CodeRef:
-    Type: String
-    Description: Ref for the application code
 
 Conditions:
   IsProduction: !Equals [ !Ref Stage, production ]
@@ -78,7 +75,6 @@ Resources:
       FunctionName: !Sub 'read-applications-for-criminal-legal-aid-${Stage}'
       CodeUri: ./aws/lambda/read-crime-applications/
       Handler: index.handler
-      VersionDescription: !Ref CodeRef
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
         Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
@@ -112,7 +108,6 @@ Resources:
       FunctionName: !Sub 'write-applications-for-criminal-legal-aid-${Stage}'
       CodeUri: ./aws/lambda/write-crime-applications/
       Handler: index.handler
-      VersionDescription: !Ref CodeRef
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
         Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
