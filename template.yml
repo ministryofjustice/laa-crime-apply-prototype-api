@@ -12,6 +12,12 @@ Parameters:
       - dev
       - staging
       - production
+  ReadVersion:
+    Type: String
+    Description: Version number for the read lambda code
+  WriteVersion:
+    Type: String
+    Description: Version number for the write lambda code
 
 Conditions:
   IsProduction: !Equals [ !Ref Stage, production ]
@@ -75,6 +81,7 @@ Resources:
       FunctionName: !Sub 'read-applications-for-criminal-legal-aid-${Stage}'
       CodeUri: ./aws/lambda/read-crime-applications/
       Handler: index.handler
+      VersionDescription: !Ref ReadVersion
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
         Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
@@ -108,6 +115,7 @@ Resources:
       FunctionName: !Sub 'write-applications-for-criminal-legal-aid-${Stage}'
       CodeUri: ./aws/lambda/write-crime-applications/
       Handler: index.handler
+      VersionDescription: !Ref WriteVersion
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
         Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]

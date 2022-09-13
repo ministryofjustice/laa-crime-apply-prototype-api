@@ -22,7 +22,11 @@ jobs:
       # sam build
       - run: sam build --use-container
 
-      # Run Unit tests - specify unit tests here
+      # lambda code versions
+      - run: ./.github/scripts/lambda-versions.sh
+        id: lambda-versions
+
+      # run Unit tests - specify unit tests here
 
       # sam deploy
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name crime-applications-staging --s3-bucket crime-apply-api-dynamo-lambda --s3-prefix sam --capabilities CAPABILITY_IAM --parameter-overrides Stage=staging
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name crime-applications-staging --s3-bucket crime-apply-api-dynamo-lambda --s3-prefix sam --capabilities CAPABILITY_IAM --parameter-overrides Stage=staging ReadVersion=${{ steps.lambda-versions.outputs.read }} WriteVersion=${{ steps.lambda-versions.outputs.write }}
