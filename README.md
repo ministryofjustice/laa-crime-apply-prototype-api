@@ -14,6 +14,11 @@ See `/dist/openapi.json` for the API spec.
 
 The `/aws/lambda` folder includes 2 lambda handlers: one for writing to the data store, one for reading from the data store. The handler uses DynamoDB as a data store.
 
+## Deployment
+
+* You can deploy to `dev` environment using SAM cli - (see instructions below)
+* Updates are deployed to the `staging` environment on pushing/merging to `main` branch. See ./github/workflows.
+
 ## Using SAM to deploy the app
 
 You can use AWS SAM to package and deploy the app. You will need to install the [AWS SAM cli](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html).
@@ -31,4 +36,4 @@ You can use AWS SAM to package and deploy the app. You will need to install the 
   ```
 - Follow the promtps, entering stack name, stage name (dev, staging, or production), and the version numbers of the lambda code
 
-See `/aws/infra/template.yml` for the SAM template.
+See `template.yml` for the SAM template.
