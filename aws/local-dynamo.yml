@@ -1,0 +1,56 @@
+AttributeDefinitions:
+- AttributeName: application_reference
+  AttributeType: S
+- AttributeName: application_status
+  AttributeType: S
+- AttributeName: provider_firm
+  AttributeType: S
+- AttributeName: provider_reference
+  AttributeType: S
+- AttributeName: submission_date
+  AttributeType: S
+- AttributeName: submission_month
+  AttributeType: S
+TableName: CrimeApplicationsTable
+KeySchema:
+- AttributeName: application_reference
+  KeyType: HASH
+- AttributeName: submission_date
+  KeyType: RANGE
+ProvisionedThroughput:
+  ReadCapacityUnits: 5
+  WriteCapacityUnits: 5
+GlobalSecondaryIndexes:
+- IndexName: month-index
+  KeySchema:
+  - AttributeName: submission_month
+    KeyType: HASH
+  - AttributeName: submission_date
+    KeyType: RANGE
+  Projection:
+    ProjectionType: ALL
+  ProvisionedThroughput:
+    ReadCapacityUnits: 5
+    WriteCapacityUnits: 5
+- IndexName: status-index
+  KeySchema:
+  - AttributeName: application_status
+    KeyType: HASH
+  - AttributeName: submission_date
+    KeyType: RANGE
+  Projection:
+    ProjectionType: ALL
+  ProvisionedThroughput:
+    ReadCapacityUnits: 5
+    WriteCapacityUnits: 5
+- IndexName: provider-index
+  KeySchema:
+  - AttributeName: provider_firm
+    KeyType: HASH
+  - AttributeName: provider_reference
+    KeyType: RANGE
+  Projection:
+    ProjectionType: ALL
+  ProvisionedThroughput:
+    ReadCapacityUnits: 5
+    WriteCapacityUnits: 5

@@ -6,12 +6,12 @@
   },
   "servers": [
     {
-      "url": "https://n7ykjge71d.execute-api.eu-west-2.amazonaws.com/dev",
-      "description": "Prototype DEV"
-    },
-    {
       "url": "https://fcshdjwbu2.execute-api.eu-west-2.amazonaws.com/dev",
       "description": "Beta DEV"
+    },
+    {
+      "url": "https://n7ykjge71d.execute-api.eu-west-2.amazonaws.com/dev",
+      "description": "Prototype DEV"
     }
   ],
   "paths": {

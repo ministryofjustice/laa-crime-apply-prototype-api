@@ -1,0 +1,50 @@
+{
+ "application_start_date": "2022-09-02T10:55:20.284Z",
+ "client_details": {
+  "client": {
+   "address": {
+    "address_line_one": "14 Real Street",
+    "address_line_two": "Sometown",
+    "county": "Hampshire",
+    "postcode": "AB1 2CD"
+   },
+   "date_of_birth": "1992-01-11",
+   "first_name": "Coco",
+   "last_name": "Cruz",
+   "national_insurance_number": "RR123498D"
+  },
+  "means": {
+   "passporting": true
+  },
+  "on_remand": false,
+  "partner_conflict_of_interest": false,
+  "partner_role_in_case": "none"
+ },
+ "case_details": {
+  "case_type": "indictable",
+  "court_type": "crown",
+  "offences": [
+   {
+    "class": "a",
+    "date": "2020-06-22",
+    "name": "Murder"
+   }
+  ],
+  "URN": "123456"
+ },
+ "interests_of_justice": [
+  {
+   "reason": "Client likely to receive custodial sentence",
+   "type": "liberty"
+  },
+  {
+   "type": "livelihood"
+  }
+ ],
+ "provider_details": {
+  "email": "johan@legal.com",
+  "firm": "Legal ABC",
+  "office": "London"
+ },
+ "provider_firm": "Legal ABC"
+}

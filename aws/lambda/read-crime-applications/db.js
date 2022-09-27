@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient();
 const config = require('./config');
 const utils = require('./utils');
+const dynamo = new AWS.DynamoDB.DocumentClient(config.dynamoSettings);
 
 const db = {
 

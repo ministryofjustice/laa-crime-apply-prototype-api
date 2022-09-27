@@ -2,9 +2,10 @@ const validate = require('./validate');
 const db = require('./db');
 const mapApplication = require('./mapApplication');
 const config = require('./config');
+const seed = require('./seed');
 
 exports.handler = async (event) => {
-  let body, id, params;
+  let body = '';
   let statusCode = 200;
   const request = event.requestContext;
 
@@ -12,6 +13,11 @@ exports.handler = async (event) => {
     switch (request.httpMethod) {
 
       case "POST":
+        if (event.headers.seed) {
+          body = await seed();
+          break;
+        }
+
         let data = JSON.parse(event.body);
         let fullSubmit = request.path.includes('/submit');
 
@@ -31,8 +37,8 @@ exports.handler = async (event) => {
         break;
 
       case "DELETE":
-        id = itemId(event);
-        params = event.queryStringParameters;
+        let id = itemId(event);
+        let params = event.queryStringParameters;
 
         if (params.version) {
           await db.delete({

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node start.js",
     "test-validation": "node validation-test.js",
-    "lint": "eslint . --ext .js"
+    "lint": "eslint . --ext .js",
+    "seed": "node seed.js"
   },
   "dependencies": {
     "ajv": "^8.10.0"

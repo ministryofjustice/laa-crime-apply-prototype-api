@@ -1,0 +1,56 @@
+{
+ "application_start_date": "2022-09-01T10:55:20.284Z",
+ "client_details": {
+  "client": {
+   "address": {
+    "address_line_one": "14 Real Street",
+    "address_line_two": "Sometown",
+    "county": "Hampshire",
+    "postcode": "AB1 2CD"
+   },
+   "first_name": "Janet",
+   "last_name": "Dean",
+   "national_insurance_number": "AA1234490D"
+  },
+  "means": {
+   "passporting": true
+  },
+  "on_remand": false,
+  "partner_conflict_of_interest": false,
+  "partner_role_in_case": "none"
+ },
+ "case_details": {
+  "case_type": "summary_only",
+  "court_type": "magistrates",
+  "co_defendants": [
+   {
+    "conflict_of_interest": false,
+    "first_name": "Jill",
+    "last_name": "Brown"
+   }
+  ],
+  "offences": [
+   {
+    "class": "c",
+    "date": "2020-06-22",
+    "name": "Assault"
+   }
+  ],
+  "URN": "123456"
+ },
+ "interests_of_justice": [
+  {
+   "reason": "Client likely to receive custodial sentence",
+   "type": "liberty"
+  },
+  {
+   "type": "livelihood"
+  }
+ ],
+ "provider_details": {
+  "email": "mary@legal.com",
+  "firm": "Legal ABC",
+  "office": "London"
+ },
+ "provider_firm": "Legal ABC"
+}
