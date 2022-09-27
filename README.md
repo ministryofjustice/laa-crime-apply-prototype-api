@@ -90,8 +90,8 @@ You can use AWS SAM to package and deploy the app manually.
 * Deploy a new version of your app using the artifacts the command above just generated (using dev as the stage, for example)
 
   ```sh
-  sam deploy --template-file out.yml --capabilities CAPABILITY_IAM --guided
+  sam deploy --template-file out.yml --capabilities CAPABILITY_IAM --guided --stack-name crime-applications-dev --parameter-overrides Stage=dev
   ```
-- Follow the promtps, entering stack name, stage name (dev, staging, or production), and the version numbers of the lambda code
+- Follow the promtps, using the default vales (for dev deploy) and entering the version numbers of the lambda code (versions are set in `aws/lambda/[name-of-lambda]/package.json`).
 
 See `template.yml` for the SAM template.
