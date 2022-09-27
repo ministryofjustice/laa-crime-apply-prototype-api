@@ -8,6 +8,7 @@ public
 node_modules/*
 .tmuxp.*
 package-lock.json
+out.yml
 aws/lambda/node_modules/*
 aws/lambda/*/node_modules/*
 aws/lambda/*/package-lock.json
