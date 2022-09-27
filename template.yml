@@ -81,6 +81,7 @@ Resources:
       FunctionName: !Sub 'read-applications-for-criminal-legal-aid-${Stage}'
       CodeUri: ./aws/lambda/read-crime-applications/
       Handler: index.handler
+      Timeout: 10
       VersionDescription: !Ref ReadVersion
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
@@ -90,6 +91,7 @@ Resources:
       Environment:
         Variables:
           TABLE: !Ref CrimeApplicationsTable
+          STAGE: !Ref Stage
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref CrimeApplicationsTable
@@ -115,6 +117,7 @@ Resources:
       FunctionName: !Sub 'write-applications-for-criminal-legal-aid-${Stage}'
       CodeUri: ./aws/lambda/write-crime-applications/
       Handler: index.handler
+      Timeout: 10
       VersionDescription: !Ref WriteVersion
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
@@ -124,6 +127,7 @@ Resources:
       Environment:
         Variables:
           TABLE: !Ref CrimeApplicationsTable
+          STAGE: !Ref Stage
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref CrimeApplicationsTable
