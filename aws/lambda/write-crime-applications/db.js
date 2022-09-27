@@ -1,8 +1,8 @@
 const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient();
 const config = require('./config');
+const dynamo = new AWS.DynamoDB.DocumentClient(config.dynamoSettings);
 
-module.exports = {
+const db = {
 
   get: (id) => {
     let params = {
@@ -30,5 +30,8 @@ module.exports = {
       }
     };
     return dynamo.delete(params).promise();
-  }
+  },
+
 };
+
+module.exports = db;

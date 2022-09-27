@@ -1,0 +1,66 @@
+{
+ "application_start_date": "2022-08-14T11:55:20.284Z",
+ "client_details": {
+  "client": {
+   "first_name": "Jamal",
+   "last_name": "Smith",
+   "national_insurance_number": "AA123456D",
+   "address": {
+    "address_line_one": "14 Real Street",
+    "address_line_two": "Sometown",
+    "county": "Hampshire",
+    "postcode": "AB1 2CD"
+   }
+  },
+  "means": {
+   "benefits": {
+    "client_benefits": [
+     "jsa"
+    ],
+    "partner_benefits": [
+     "uc"
+    ]
+   },
+   "capital": {
+    "housing": [
+     {
+      "ownership_type": "sole",
+      "property_value": 123456,
+      "remaining_mortgage": 1234
+     }
+    ]
+   },
+   "employment_status": "none",
+   "passporting": false,
+   "total_income": 25669
+  },
+  "on_remand": false
+ },
+ "case_details": {
+  "case_type": "summary_only",
+  "court_type": "magistrates",
+  "offences": [
+   {
+    "class": "c",
+    "date": "2020-06-22",
+    "name": "Assault"
+   }
+  ],
+  "URN": "123456"
+ },
+ "interests_of_justice": [
+  {
+   "reason": "Client likely to receive custodial sentence",
+   "type": "liberty"
+  },
+  {
+   "type": "livelihood"
+  }
+ ],
+ "provider_details": {
+  "email": "mary@legal.com",
+  "firm": "Legal ABC",
+  "office": "London"
+ },
+ "provider_firm": "Legal ABC"
+}
