@@ -1,0 +1,41 @@
+{
+  "body": "{\"application_start_date\":\"2022-09-01T10:55:20.284Z\",\"client_details\":{\"client\":{\"address\":{\"address_line_one\":\"14 Real Street\",\"address_line_two\":\"Sometown\",\"county\":\"Hampshire\",\"postcode\":\"AB1 2CD\"},\"first_name\":\"Violet\",\"last_name\":\"Smith\",\"national_insurance_number\":\"AA1234490C\"},\"means\":{\"passporting\":true},\"on_remand\":false,\"partner_conflict_of_interest\":false,\"partner_role_in_case\":\"none\"},\"case_details\":{\"case_type\":\"summary_only\",\"court_type\":\"magistrates\",\"co_defendants\":[{\"conflict_of_interest\":false,\"first_name\":\"Jill\",\"last_name\":\"Brown\"}],\"offences\":[{\"class\":\"c\",\"date\":\"2020-06-22\",\"name\":\"Assault\"}],\"URN\":\"123456\"},\"interests_of_justice\":[{\"reason\":\"Client likely to receive custodial sentence\",\"type\":\"liberty\"},{\"type\":\"livelihood\"}],\"provider_details\":{\"email\":\"mary@legal.com\",\"firm\":\"Legal ABC\",\"office\":\"London\"},\"provider_firm\":\"Legal ABC\"}",
+  "resource": "/",
+  "path": "/applications/submit",
+  "httpMethod": "POST",
+  "isBase64Encoded": true,
+  "headers": {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, sdch",
+    "Cache-Control": "max-age=0",
+    "X-Forwarded-For": "127.0.0.1, 127.0.0.2",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "requestContext": {
+    "accountId": "123456789012",
+    "resourceId": "123456",
+    "stage": "local",
+    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+    "requestTime": "09/Apr/2015:12:34:56 +0000",
+    "requestTimeEpoch": 1428582896000,
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "accessKey": null,
+      "sourceIp": "127.0.0.1",
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "Custom User Agent String",
+      "user": null
+    },
+    "path": "/dev/applications/submit",
+    "resourcePath": "/",
+    "httpMethod": "POST",
+    "apiId": "1234567890",
+    "protocol": "HTTP/1.1"
+  }
+}
