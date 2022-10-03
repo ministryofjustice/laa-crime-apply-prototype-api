@@ -4,6 +4,8 @@ A prototype API that supports storage of applications for criminal legal aid.
 
 The API is powered by Amazon API Gateway, AWS Lambda and Amazon DynamoDB. Involved resources are defined and provisioned using AWS SAM.
 
+![Architecture](aws/architecture.svg)
+
 ## Components
 
 * API - see `/dist/openapi.json` for the API spec, test from [Swagger UI](https://crime-apply-api.s3.eu-west-2.amazonaws.com/index.html).
